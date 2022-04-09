@@ -1,0 +1,3 @@
+# skg
+
+Skuteczna nauka głosowa.
