@@ -1,6 +1,6 @@
 ## skg
 
-Projekt służy ułatwieniu chętnym nauki.
+Skuteczna nauka głosowa.
 
 Dodaje dodatkowy filtr do spotkania - aby dołaczyć do spotkania trzeba podać pytania i kwestie które chce się rozwinąć i zadeklarować typ obecności i aktywności.
 
