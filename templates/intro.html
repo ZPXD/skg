@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <br>
+    <h1 style="text-align:center">Zajęcia Programowania #0{{nr}}</h1>
+
+    <br>
+    <h1 style="text-align:center"><b>Info:</b></h1>
+    <p><b>{{ meeting_description }}</b></p>
+
+    <br>
+    <br>
+    <h1 style="text-align:center"><b>Dołącz:</b></h1>
+
+    <div class="form-wrapper">
+        <form style="text-align:center" action="" method="post">
+
+            {{ form.csrf_token() }}
+        
+            <p><b>Mail:</b></p>
+            {{ form.email }}
+        
+            <p><b>Hasło:</b></p>
+            {{ form.password }}
+        	
+        	<br>
+            
+            <p><b>W dzisiaj chcę się nauczyć:</b></p>
+            <p>{{ form.i_want_to_learn }}</p>
+        
+            <p><b>Cel na ten tydzień:</b></p>
+            {{ form.week_goal }}
+        
+        	<br>
+
+            <p><b>Pytanie które mam związane z nauką programowania:</b></p>
+            {{ form.q1 }}
+        
+            <p><b>Pytanie 2 (opcjonalne :):</b></p>
+            {{ form.q2 }}
+        
+            <p><b>Pytanie 3 (opcjonalne :):</b></p>
+            {{ form.q3 }}
+        
+        	<br>
+
+            <p><b>Zadanie domowe zrobione:</b></p>
+            {{ form.homework }}
+        
+            <p><b>Materiał z zeszłych zajęć ogarniam:</b></p>
+            {{ form.last_meeting }}
+        
+        	<br>
+
+            <p><b>Aktywna nauka:</b></p>
+            {{ form.active_learner }}
+        
+            <p><b>Ogarnięty głos i mikrofon:</b></p>
+            {{ form.voice }}
+        
+            <p><b>Intencja:</b></p>
+            {{ form.intention }}
+
+            <br>
+            
+            {{ form.button }}
+
+        </form>
+    </div>
+
+{% endblock %}
