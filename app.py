@@ -15,6 +15,7 @@ from flask_login import login_required, current_user, login_user, logout_user
 
 import os
 
+
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/xd.db'
@@ -32,6 +33,7 @@ login_manager = LoginManager(app)
 def index():
     get_current_github_repo()
     return render_template("index.html")
+
 
 @app.route('/zajecia/<int:nr>', methods=["GET", "POST"])
 def zpxd_meeting_intro(nr):
@@ -131,7 +133,7 @@ def get_current_github_repo():
 
 def get_meeting_info(nr):
     '''
-    to recode
+    To recode.
     '''
     where = os.path.join(os.getcwd(), 'data', 'zajecia')
     if nr in range(1, 12):
@@ -190,7 +192,7 @@ class Meeting(UserMixin, db.Model):
 @app.before_first_request
 def create_all():
     db.create_all()
-    #get_current_github_repo() # if h=n
+    #get_current_github_repo() # godzina
 
 
 # Forms
