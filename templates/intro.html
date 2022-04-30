@@ -7,7 +7,7 @@
 
     <br>
     <h1 style="text-align:center"><b>Info:</b></h1>
-    <p><b>{{ meeting_description }}</b></p>
+    <p style="text-align:center">{{ meeting_description }}</p>
 
     <br>
     <br>
@@ -25,6 +25,7 @@
             {{ form.password }}
         	
         	<br>
+        	<br>
             
             <p><b>W dzisiaj chcę się nauczyć:</b></p>
             <p>{{ form.i_want_to_learn }}</p>
@@ -33,8 +34,9 @@
             {{ form.week_goal }}
         
         	<br>
+        	<br>
 
-            <p><b>Pytanie które mam związane z nauką programowania:</b></p>
+            <p><b>Pytanie dot. Pythona i nauki programowania:</b></p>
             {{ form.q1 }}
         
             <p><b>Pytanie 2 (opcjonalne :):</b></p>
@@ -47,10 +49,8 @@
 
             <p><b>Zadanie domowe zrobione:</b></p>
             {{ form.homework }}
-        
-            <p><b>Materiał z zeszłych zajęć ogarniam:</b></p>
-            {{ form.last_meeting }}
-        
+   
+        	<br>
         	<br>
 
             <p><b>Aktywna nauka:</b></p>
@@ -63,7 +63,7 @@
             {{ form.intention }}
 
             <br>
-            
+
             {{ form.button }}
 
         </form>

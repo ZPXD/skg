@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 
 import flask_wtf
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired
 
 from flask_bootstrap import Bootstrap
@@ -36,8 +36,7 @@ def index():
 @app.route('/zajecia/<int:nr>', methods=["GET", "POST"])
 def zpxd_meeting_intro(nr):
     meeting_description = get_meeting_info(nr)
-    print(meeting_description)
-    form = LoginForm()
+    form = MeetingForm()
     if form.validate_on_submit():
 
         email = form.email.data
@@ -147,7 +146,7 @@ def get_meeting_info(nr):
     for i, line in enumerate(readme):
         if i == 0:
             headline = line
-        if i in [3,4,5]:
+        if i in [2, 3, 4, 5]:
             meeting_description.append(line)
     meeting_description = ' '.join(meeting_description)
     return meeting_description
@@ -220,8 +219,8 @@ class MeetingForm(FlaskForm):
         ('Chyba tak', 'Chyba tak'),
         ('Dzisiaj jeszcze nie mam', 'Dzisiaj jeszcze nie mam'),
     ]
-    active_learner = StringField(choices=choices_active_learner)
-    voice = StringField(choices=choices_voice)
+    active_learner = SelectField(choices=choices_active_learner)
+    voice = SelectField(choices=choices_voice)
 
     intention = StringField(validators=[DataRequired()])
 
