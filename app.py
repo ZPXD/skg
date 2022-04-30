@@ -1,25 +1,27 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, redirect, url_for
 
-import flask_wtf
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from flask_wtf import FlaskForm, RecaptchaField
+from wtforms import StringField, TextAreaField, SubmitField, PasswordField, DateField, SelectField
 from wtforms.validators import DataRequired
 
-from flask_bootstrap import Bootstrap
-
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from flask_login import LoginManager, UserMixin
+from flask_login import LoginManager
 from flask_login import login_required, current_user, login_user, logout_user
+
+import pandas as pd
+import random
+
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/xd.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/xdd.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.secret_key = ':)'
 
-bootstrap = Bootstrap(app)
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 
@@ -28,7 +30,51 @@ login_manager = LoginManager(app)
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+
+    # Dane
+    df = pd.read_csv('data/sample.csv')
+    
+    # Losowanie pytania
+    i = random.choice(range(len(df)))
+    this_question = df.loc[i, :]
+    question = this_question['question']
+    answer = this_question['answer']
+
+    return render_template("index.html", question=question, answer=answer)
+
+@app.route('/dodaj_pytanie', methods=["GET", "POST"])
+def add_question():
+    form = QuestionForm()
+    if form.validate_on_submit():
+        question = form.question.data
+        answer = form.answer.data
+        source = form.source.data
+        result = form.result.data
+        category = form.category.data
+        level = form.level.data
+
+        question = Question(question=question, answer=answer, source=source, result=result, category=category, level=level)
+        db.session.add(question)
+        db.session.commit()
+
+        return redirect( url_for('index'))
+    return render_template("dodaj_pytanie.html", form=form)
+
+@app.route('/dodaj_zbior_pytan', methods=["GET", "POST"])
+def add_questions_link():
+    form = QuestionLinkForm()
+    if form.validate_on_submit():
+
+        link = form.link.data
+        comment = form.comment.data
+        category = form.category.data
+
+        questionslink = QuestionLink(link=link, comment=comment)
+        db.session.add(questionslinks)
+        db.session.commit()
+
+        return redirect( url_for('index'))
+    return render_template("dodaj_zbior_pytan.html", form=form)
 
 
 # Login
@@ -94,9 +140,9 @@ def user(name):
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True, nullable=False)
+    name = db.Column(db.String(120), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(120), nullable=False)
 
     def set_password(self,password):
         self.password = generate_password_hash(password)
@@ -106,13 +152,79 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.name)
- 
+
 @app.before_first_request
 def create_all():
     db.create_all()
+    
 
+class Question(UserMixin, db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    question = db.Column(db.String())
+    answer = db.Column(db.String())
+    source = db.Column(db.String())
+    result = db.Column(db.String())
+    category = db.Column(db.String())
+    level = db.Column(db.String())
+
+    def __repr__(self):
+        return '<Question {}>'.format(self.question)
+
+class QuestionLink(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    link = db.Column(db.String())
+    comment = db.Column(db.String())
+   
+    def __repr__(self):
+        return '<QuestionLink {}>'.format(self.link)
 
 # Forms
+
+class QuestionForm(FlaskForm):
+    question = StringField(validators=[DataRequired()])
+    answer = StringField(validators=[DataRequired()])
+    source = StringField(validators=[DataRequired()])
+    result = StringField(validators=[DataRequired()])
+
+    category_choices = [
+        ('Backend', 'Backend'),
+        ('Frontend', 'Frontend'),
+        ('Data Science', 'Data Science'),
+        ('Testing', 'Testing'),
+        ('Cybersecurity', 'Cybersecurity'),
+        ('DevOps', 'DevOps'),
+        ('AI', 'AI'),
+        ('Networking', 'Networking'),
+    ]
+
+    level_choices = [
+        ('Junior', 'Junior'),
+        ('Mid', 'Mid'),
+        ('Senior', 'Senior'),
+    ]
+
+    category = SelectField(choices=category_choices)
+    level = SelectField(choices=level_choices)
+    button = SubmitField('Prześlij pytanie')
+
+class QuestionLinkForm(FlaskForm):
+    link = StringField(validators=[DataRequired()])
+    comment = StringField(validators=[DataRequired()])
+
+    category_choices = [
+        ('Backend', 'Backend'),
+        ('Frontend', 'Frontend'),
+        ('Data Science', 'Data Science'),
+        ('Testing', 'Testing'),
+        ('Cybersecurity', 'Cybersecurity'),
+        ('DevOps', 'DevOps'),
+        ('AI', 'AI'),
+        ('Networking', 'Networking'),
+    ]
+
+    category = SelectField(choices=category_choices)
+    button = SubmitField('zaloguj się')
 
 class LoginForm(FlaskForm):
     email = StringField('email', validators=[DataRequired()])
