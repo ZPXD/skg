@@ -1,10 +1,11 @@
 ## skg
 
-Pythonowy sprawdzacz umiejętności.
+Projekt służy ułatwieniu chętnym nauki.
+
+Dodaje dodatkowy filtr do spotkania - aby dołaczyć do spotkania trzeba podać pytania i kwestie które chce się rozwinąć i zadeklarować typ obecności i aktywności.
 
 
-
-- discord: https://discord.gg/YQ5CU6yqJA
+- discord: https://discord.gg/868pyBsuSb
 - www: www.tbd.pl
 
 
